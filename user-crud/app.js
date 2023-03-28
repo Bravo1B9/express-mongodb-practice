@@ -20,6 +20,13 @@ const connectToDatabase = async () => {
 
 connectToDatabase();
 
+app.post('/users', async (req, res) => {
+  const db = client.db('user-crud');
+  const user = req.body;
+  await db.collection('users').insertOne(user);
+  res.json({ msg: 'User added' });
+});
+
 app.listen(port, () => {
   console.log(`App running on port ${port}`);
 })
