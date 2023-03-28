@@ -27,6 +27,12 @@ app.post('/users', async (req, res) => {
   res.json({ msg: 'User added' });
 });
 
+app.get('/users', async (req, res) => {
+  const db = client.db('user-crud');
+  const users = await db.collection('users').find().toArray();
+  res.json(users);
+});
+
 app.listen(port, () => {
   console.log(`App running on port ${port}`);
 })
