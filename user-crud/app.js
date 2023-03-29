@@ -1,5 +1,6 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
+const ObjectId = require('mongodb').ObjectId;
 
 const app = express();
 const port = 3000;
@@ -36,8 +37,16 @@ app.get('/users', async (req, res) => {
 app.get('/users/:id', async (req, res) => {
   const db = client.db('user-crud');
   const id = req.params.id;
-  const user = await db.collection('users').findOne({ _id: id });
+  const user = await db.collection('users').findOne({ _id: new ObjectId(id) });
   res.json(user);
+});
+
+app.put('/users/:id', async (req, res) => {
+  const db = client.db('user-crud');
+  const id = req.params.id;
+  const username = req.body.username;
+  await db.collection('users').updateOne({ _id: new ObjectId(id) }, { $set: { username } });
+  res.json({ msg: 'User updated' });
 });
 
 app.listen(port, () => {
